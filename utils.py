@@ -59,7 +59,24 @@ def split_train_val_test(json_file):
     test_files = [file for file in files if file not in training_files]
 
 
+    # Create train and test folders
+    train_folder_i = '/content/sm/images/train'
+    test_folder_i = '/content/sm/images/valid'
+    train_folder_l = '/content/sm/labels/train'
+    test_folder_l = '/content/sm/labels/valid'
+    os.mkdir(train_folder_i, exist_ok=True)
+    os.mkdir(test_folder_i, exist_ok=True)
+    os.mkdir(train_folder_l, exist_ok=True)
+    os.mkdir(test_folder_l, exist_ok=True)
+
+    # Move images and labels to train and test folders
     for file in training_files:
-      
+        os.rename(os.path.join(images_dir, file), os.path.join(train_folder_i, file))
+        os.rename(os.path.join(labels_dir, file.replace('.jpg', '.txt')), os.path.join(train_folder_l, file.replace('.jpg', '.txt')))
 
+    for file in test_files:
+        os.rename(os.path.join(images_dir, file), os.path.join(test_folder_i, file))
+        os.rename(os.path.join(labels_dir, file.replace('.jpg', '.txt')), os.path.join(test_folder_l, file.replace('.jpg', '.txt')))
 
+    print(f'Training set size: {len(training_files)}')
+    print(f'Test set size: {len(test_files)}')
