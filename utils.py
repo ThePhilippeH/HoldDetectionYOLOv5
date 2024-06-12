@@ -2,6 +2,7 @@ import json
 import os
 import torch
 import torchvision
+import shutil
 
 
 def convert_json_to_yolo(json_file, output_dir):
@@ -80,3 +81,11 @@ def split_train_val_test(json_file):
 
     print(f'Training set size: {len(training_files)}')
     print(f'Test set size: {len(test_files)}')
+
+
+def move_images_to_folder(dir):
+  os.chdir(dir)
+  os.mkdir('images')
+  image_files = [file for file in os.listdir(dir) if file.endswith('.jpg')]
+  for file in image_files:
+    shutil.move(file, os.path.join(dir, 'images', file))
