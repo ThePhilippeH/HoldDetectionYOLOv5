@@ -1,7 +1,5 @@
 # HoldDetectionYOLOv5
 
-# HoldDetectionYOLOv5
-
 Welcome to the HoldDetectionYOLOv5 project!
 
 ## Description
