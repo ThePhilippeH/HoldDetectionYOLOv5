@@ -1,6 +1,6 @@
-path: ../content/sm
-train: ../content/sm/train
-val: ../content/sm/val
+path: ../content/bh
+train: ../content/bh/train
+val: ../content/bh/labels
 
 names:
   0: hold
