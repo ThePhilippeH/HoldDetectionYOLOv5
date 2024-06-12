@@ -6,22 +6,26 @@ import shutil
 
 
 def convert_json_to_yolo(json_file, output_dir):
-  labels_dir = output_dir + 'labels'
+  os.chdir(output_dir)
+  labels_dir = 'labels'
   os.makedirs(labels_dir , exist_ok=True)
 
   with open(json_file) as f:
     data = json.load(f)
+    images_metadata = data['_via_img_metadata']
 
-    for key in data:
-      image = data[key]
+    for key in images_metadata:
+      image = images_metadata[key]
       filename = image['filename']
       regions = image['regions']
+      
 
       if not regions:
         continue
       
       txt_filename = os.path.splitext(filename)[0] + '.txt'
       txt_filepath = os.path.join(labels_dir, txt_filename)
+      print(filename)
 
       with open(txt_filepath, 'w') as txt_file:
         for region in regions:
@@ -38,14 +42,12 @@ def convert_json_to_yolo(json_file, output_dir):
           center_y = min(all_points_y) + height / 2
 
           label = f'{class_name} {center_x} {center_y} {width} {height}\n'
-    txt_file.write(label)
+          txt_file.write(label)
 
-def split_train_val_test(json_file):
+def split_train_val_test(dir, train_ratio, val_ratio, test_ratio):
 
-    images_dir = '/content/sm/images'
-    labels_dir = '/content/sm/labels'
-    train_ratio = 0.8
-    test_ratio = 0.2
+    images_dir = dir +'images'
+    labels_dir = dir +'labels'
     
     
     torch.random.manual_seed(42)
@@ -82,10 +84,11 @@ def split_train_val_test(json_file):
     print(f'Training set size: {len(training_files)}')
     print(f'Test set size: {len(test_files)}')
 
-
 def move_images_to_folder(dir):
   os.chdir(dir)
+  if os.path.exists('images'):
+    return
   os.mkdir('images')
-  image_files = [file for file in os.listdir(dir) if file.endswith('.jpg')]
+  image_files = [file for file in os.listdir() if file.endswith('.jpg')]
   for file in image_files:
     shutil.move(file, os.path.join(dir, 'images', file))
