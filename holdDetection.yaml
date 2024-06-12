@@ -1,0 +1,9 @@
+path: ../content/sm
+train: ../content/sm/train
+val: ../content/sm/val
+
+names:
+  0: hold
+  1: notHold
+
+
